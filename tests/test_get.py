@@ -4,7 +4,6 @@ def test_get_bloodpac():
     
     signpost = DOIClient(baseurl="https://dx.doi.org/")
     
-    res = signpost.get("10.25638/BLOODPAC.0001")
-    assert res.status_code == 200
+    res = signpost.get("10.1007/s41060-017-0052-3")
     print(res.json())
 

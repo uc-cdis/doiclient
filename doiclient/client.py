@@ -39,8 +39,7 @@ class DOIClient(object):
             if e.response.status_code == 404:
                 return None
             else:
-                print("Exception!!" + str(e.reason))
-                return None
+                raise e
         try:
             return Document(self, did, json=response.json())
         except ValueError as e:
@@ -82,7 +81,9 @@ class Document(object):
         """refresh the document contents from the server"""
         json = json or self.client._get(self.did).json()
         assert json["DOI"].lower() == self.did.lower()
-        self.urls = [x['URL'] for x in json['link']]
+        self.urls = []
+        if 'link' in json:
+            self.urls = [x['URL'] for x in json['link']]
         self.rev = ""
         self.size = ""
         self.hashes = ""
