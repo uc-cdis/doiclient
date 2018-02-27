@@ -24,18 +24,11 @@ def handle_error(resp):
 
 class DOIClient(object):
 
-    def __init__(self, baseurl, version="v0", auth=None):
-        self.auth = auth
+    def __init__(self, baseurl):
         self.url = baseurl
-        self.version = version
 
     def url_for(self, *path):
         return urljoin(self.url, "/".join(path))
-
-    def check_status(self):
-        """Check that the API we are trying to communicate with is online"""
-        resp = requests.get(self.url + '/index')
-        handle_error(resp)
 
     def get(self, did):
         """Return a document object corresponding to a single did"""
@@ -58,26 +51,6 @@ class DOIClient(object):
         handle_error(resp)
         return resp
 
-    def _post(self, *path, **kwargs):
-        resp = requests.post(self.url_for(*path), **kwargs)
-        handle_error(resp)
-        return resp
-
-    def _put(self, *path, **kwargs):
-        resp = requests.put(self.url_for(*path), **kwargs)
-        handle_error(resp)
-        return resp
-
-    def _delete(self, *path, **kwargs):
-        resp = requests.delete(self.url_for(*path), **kwargs)
-        handle_error(resp)
-        return resp
-
-
-class DocumentDeletedError(Exception):
-    pass
-
-
 class Document(object):
 
     def __init__(self, client, did, json=None):
@@ -86,11 +59,11 @@ class Document(object):
         self.urls = None
         self.sha1 = None
         self._fetched = False
-        self.refresh(json)
+        self._load(json)
 
     def _render(self, include_rev=True):
         if not self._fetched:
-            raise RuntimeError("Document must be fetched from server with doc.refresh() before being rendered as json")
+            raise RuntimeError("Document must be fetched from server before being rendered as json")
         json = {
             "urls": self.urls,
             "hashes": self.hashes,
@@ -105,7 +78,7 @@ class Document(object):
         json["did"] = self.did
         return json
 
-    def refresh(self, json=None):
+    def _load(self, json=None):
         """refresh the document contents from the server"""
         json = json or self.client._get(self.did).json()
         assert json["DOI"].lower() == self.did.lower()
