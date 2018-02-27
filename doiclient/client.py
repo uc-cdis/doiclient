@@ -1,5 +1,5 @@
 import json
-from urlparse import urljoin
+from future.moves.urllib.parse import urljoin
 
 import requests
 
