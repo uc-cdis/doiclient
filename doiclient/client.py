@@ -1,5 +1,8 @@
 import json
-from future.moves.urllib.parse import urljoin
+try:
+    from urlparse import urljoin
+except ImportError:
+    from urllib.parse import urljoin
 
 import requests
 
