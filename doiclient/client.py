@@ -84,7 +84,7 @@ class Document(object):
         self.urls = []
         if 'link' in json:
             self.urls = [x['URL'] for x in json['link']]
-        self.rev = ""
-        self.size = ""
-        self.hashes = ""
+        self.rev = None
+        self.size = None
+        self.hashes = {}
         self._fetched = True
