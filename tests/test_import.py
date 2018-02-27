@@ -1,5 +1,5 @@
-def test_import_index():
+def test_import():
     '''
     Try to import the index package.
     '''
-    import indexclient
+    import doiclient

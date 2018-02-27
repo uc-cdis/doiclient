@@ -61,5 +61,8 @@ docs/_build/
 #.swp
 *.swp
 
+.DS_Store
+
 local_settings.py
 settings.yaml
+
