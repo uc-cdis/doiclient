@@ -2,7 +2,7 @@
 def test_get_matsu():
     from doiclient.client import DOIClient
     
-    signpost = DOIClient(baseurl="https://dx.doi.org/")
+    signpost = DOIClient(baseurl="https://doi.org/")
     
     res = signpost.get("10.1007/s41060-017-0052-3")
     res = res.to_json()
