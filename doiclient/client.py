@@ -1,4 +1,5 @@
 import json
+
 try:
     from urlparse import urljoin
 except ImportError:
@@ -23,7 +24,6 @@ def handle_error(resp):
 
 
 class DOIClient(object):
-
     def __init__(self, baseurl):
         self.url = baseurl
 
@@ -33,7 +33,7 @@ class DOIClient(object):
     def get(self, did):
         """Return a document object corresponding to a single did"""
         try:
-            headers = {'Accept' : 'application/vnd.citationstyles.csl+json'}
+            headers = {"Accept": "application/vnd.citationstyles.csl+json"}
             response = self._get(did, headers=headers)
         except requests.HTTPError as e:
             if e.response.status_code == 404:
@@ -50,8 +50,8 @@ class DOIClient(object):
         handle_error(resp)
         return resp
 
-class Document(object):
 
+class Document(object):
     def __init__(self, client, did, json=None):
         self.client = client
         self.did = did
@@ -62,12 +62,10 @@ class Document(object):
 
     def _render(self, include_rev=True):
         if not self._fetched:
-            raise RuntimeError("Document must be fetched from server before being rendered as json")
-        json = {
-            "urls": self.urls,
-            "hashes": self.hashes,
-            "size": self.size
-        }
+            raise RuntimeError(
+                "Document must be fetched from server before being rendered as json"
+            )
+        json = {"urls": self.urls, "hashes": self.hashes, "size": self.size}
         if include_rev:
             json["rev"] = self.rev
         return json
@@ -82,8 +80,8 @@ class Document(object):
         json = json or self.client._get(self.did).json()
         assert json["DOI"].lower() == self.did.lower()
         self.urls = []
-        if 'link' in json:
-            self.urls = [x['URL'] for x in json['link']]
+        if "link" in json:
+            self.urls = [x["URL"] for x in json["link"]]
         self.rev = None
         self.size = None
         self.hashes = {}

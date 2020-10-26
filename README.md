@@ -4,5 +4,3 @@ DOIClient
 
 This is the client library for making requests to the doi.org service
 and returning an Indexd compatible document.
-
-
